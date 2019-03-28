@@ -6,6 +6,7 @@ function draw_grid(ctx, minor, major, stroke, fill) {
   ctx.save();
   ctx.strokeStyle = stroke;
   ctx.fillStyle = fill;
+
   let width = ctx.canvas.width, height = ctx.canvas.height
   for(var x = 0; x < width; x += minor) {
     ctx.beginPath();
