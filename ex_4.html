@@ -14,21 +14,11 @@
     context.strokeStyle = "white";
 
     context.translate(200, 200);
-    draw_ship(context, 150, {curve: Math.random(), guide: true});
-
-    // let x, y, angle = 0;
-    // let w = context.canvas.width, h = context.canvas.height;
-    // for(y = h/20; y < h; y += h/10) {
-    //   for(x = w/20; x < w; x += w/10) {
-    //     context.save();
-    //     context.translate(x, y);
-    //     context.rotate(angle);
-    //     draw_ship(context, w/30, {guide: true, lineWidth: 1});
-    //     context.restore();
-    //     angle = (angle + .0075 * Math.PI);
-    //   }
-    // }
-
+    draw_ship(context, 150, {
+      curve1: Math.random(),
+      curve2: Math.random(),
+      guide: true
+    });
     </script>
   </body>
 </html>
