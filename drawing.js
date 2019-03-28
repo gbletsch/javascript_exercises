@@ -26,7 +26,16 @@ function draw_grid(ctx, minor, major, stroke, fill) {
   ctx.restore();
 }
 
+function draw_alert() {
+  alert('alert');
+}
+
 function pacman(ctx, x, y, radius, open) {
+  x = x || 200
+  y = y || 200
+  radius = radius || 150
+  open = open || Math.random()
+
   // ctx.save();
   ctx.beginPath();
   // context.arc(x, y, radius, start_angle, end_angle)
@@ -45,7 +54,8 @@ function draw_ship(ctx, x, y, radius, options) {
   options = options || {};
 
   // let to zero just to use .translate in the canvas
-  let x = y = 0;
+  // x = 0;
+  // y = 0;
   ctx.save();
   // optionally draw a guide
   if (options.guide) {
