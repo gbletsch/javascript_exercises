@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Exercise 4</title>
+    <link rel="stylesheet" href="styles.css"></link>
+    <script src='drawing.js'></script>
+  </head>
+  <body>
+    <canvas id='pacman' width="400" height="400"></canvas>
+    <script>
+      var canvas = document.getElementById('pacman');
+      var context = canvas.getContext('2d');
+      draw_grid(context);
+      pacman(context, 200, 200, 150, Math.random());
+
+
+    </script>
+
+
+</html>
