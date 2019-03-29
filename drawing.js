@@ -46,12 +46,12 @@ function pacman(ctx, x, y, radius, open) {
   // ctx.restore();
   }
 
-
 function draw_ship(ctx, radius, options) {
   options = options || {};
-  let angle = (options.angle || .5 * Math.PI) / 2;
-  let curve1 = options.curve1 || .25;
-  let curve2 = options.curve2 || .75;
+  let angle = (options.angle || 0.5 * Math.PI) / 2;
+  // Now we have two curve arguments
+  let curve1 = options.curve1 || 0.25;
+  let curve2 = options.curve2 || 0.75;
   ctx.save();
   if(options.guide) {
     ctx.strokeStyle = "white";
@@ -67,6 +67,7 @@ function draw_ship(ctx, radius, options) {
   ctx.fillStyle = options.fill || "black";
   ctx.beginPath();
   ctx.moveTo(radius, 0);
+  // here we have the three curves
   ctx.quadraticCurveTo(
     Math.cos(angle) * radius * curve2,
     Math.sin(angle) * radius * curve2,
@@ -82,35 +83,44 @@ function draw_ship(ctx, radius, options) {
     Math.sin(-angle) * radius * curve2,
     radius, 0
   );
-  ctx.closePath();
   ctx.fill();
   ctx.stroke();
+  // the guide drawing code is getting complicated
   if(options.guide) {
-    ctx.strokeStyle = 'white';
-    ctx.fillStyle = 'white';
-    ctx.lineWidth = .5;
+    ctx.strokeStyle = "white";
+    ctx.fillStyle = "white";
+    ctx.lineWidth = 0.5;
     ctx.beginPath();
     ctx.moveTo(
       Math.cos(-angle) * radius,
       Math.sin(-angle) * radius
     );
-    ctx.lineTo(0, 0);
-    ctx.moveTo(-radius, 0);
-    ctx.lineTo(0, 0);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(
-      Math.cos(angle) * radius * curve2,
-      Math.sin(angle) * radius * curve2,
-      radius / 40, 0, 2 * Math.PI
-    );
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(
-      radius * curve1 - radius, 0,
-      radius / 50, 0,
-      2 * Math.PI
-    );
-  }
-  ctx.restore();
+ ctx.lineTo(0, 0);
+ ctx.lineTo(
+   Math.cos(angle) * radius,
+   Math.sin(angle) * radius
+ );
+ ctx.moveTo(-radius, 0);
+ ctx.lineTo(0, 0);
+ ctx.stroke();
+ ctx.beginPath();
+ ctx.arc(
+   Math.cos(angle) * radius * curve2,
+   Math.sin(angle) * radius * curve2,
+   radius/40, 0, 2 * Math.PI
+ );
+ ctx.fill();
+ ctx.beginPath();
+ ctx.arc(
+   Math.cos(-angle) * radius * curve2,
+   Math.sin(-angle) * radius * curve2,
+   radius/40, 0, 2 * Math.PI
+ );
+ ctx.fill();
+ ctx.beginPath();
+ ctx.arc(radius * curve1 - radius, 0, radius/50, 0, 2 *
+Math.PI);
+ ctx.fill();
+}
+ctx.restore();
 }
