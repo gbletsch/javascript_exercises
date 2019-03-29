@@ -11,20 +11,22 @@
     <script>
       let context = document.getElementById("asteroids").getContext("2d");
       draw_grid(context);
-      var segments = 15, noise = 0.4;
-      for(let x=0.1; x<1; x+= 0.2) {
-        for(let y=0.1; y<1; y+= 0.2) {
+
+      var segments = 15, noise = 0;
+      var shape = [];
+      for(var i = 0; i < segments; i++) {
+        shape.push(2 * (Math.random() - 0.5));
+      }
+      for(let y=0.1; y<1; y+= 0.2) {
+        for(let x=0.1; x<1; x+= 0.2) {
           context.save();
           context.translate(context.canvas.width * x,
-                            context.canvas.height * y);
-          draw_asteroid(context,
-                        context.canvas.width / 12,
-                        segments,
-                        {noise: noise, guide: true});
+          context.canvas.height * y);
+          draw_asteroid(context, context.canvas.width / 16, shape, {noise: noise, guide: true});
           context.restore();
+          noise += 0.025;
         }
       }
-
   	</script>
   </body>
 </html>
