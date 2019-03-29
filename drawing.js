@@ -133,7 +133,10 @@ function draw_asteroid(ctx, radius, segments, options) {
   ctx.beginPath();
   for(let i = 0; i < segments; i++) {
     ctx.rotate(2 * Math.PI / segments);
-    ctx.lineTo(radius, 0);
+    ctx.lineTo(radius + radius * options.noise * (Math.random() - 0.5), 0);
+    // ctx.lineTo(radius * 0.8 + radius * 0.4 * Math.random(), 0);
+    // ctx.lineTo(radius * Math.random(), 0);
+    // ctx.lineTo(radius, 0);
   }
   ctx.closePath();
   ctx.fill();

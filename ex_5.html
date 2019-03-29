@@ -18,7 +18,8 @@
           context.save();
           context.translate(context.canvas.width * x,
                             context.canvas.height * y);
-          draw_asteroid(context, 60, segments, {guide: true});
+          draw_asteroid(context, 60, segments, {guide: true,
+                                                noise: .3});
          context.restore();
       }
     }
