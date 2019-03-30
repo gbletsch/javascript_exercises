@@ -7,13 +7,14 @@
   </head>
   <body>
     <h1>Animation</h1>
-    <canvas id='asteroids' width='300' height='300'></canvas>
+    <canvas id='asteroids' width='400' height='400'></canvas>
     <script>
       var canvas = document.getElementById('asteroids');
       var context = canvas.getContext('2d');
       context.strokeStyle = 'white';
       context.lineWidth = 1.5;
-      var x = 0, y = canvas.height / 2;
+      var yspeed = 0, gravity = .1, xspeed = 1.5, radius = 40;
+      var x = radius + 1, y = canvas.height / 3;
 
       function frame() {
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -22,20 +23,25 @@
       }
 
       function update() {
-        x += 1;
-      }
+        x += xspeed;
+        y += yspeed;
+        yspeed += gravity;
+        if(y >= canvas.height - radius) {
+          y = canvas.height - radius;
+          // add an extra radius (não entendi essa)
+          yspeed *= -.6;
+          yspeed *= .95;
+        }
+        if(x < 0 || x + radius >= canvas.width){
+          x = (x + canvas.width) % canvas.width;
+        }
 
       function draw(ctx) {
         draw_grid(ctx);
-        ctx.beginPath();
-        ctx.arc(x, y, 40, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();
+        draw_pacman(ctx, x, y, radius);
       }
 
       setInterval(frame, 1000/60); // 60 fps
     </script>
   </body>
-
-
 </html>

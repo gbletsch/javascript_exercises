@@ -27,7 +27,7 @@ function draw_grid(ctx, minor, major, stroke, fill) {
   ctx.restore();
 }
 
-function pacman(ctx, x, y, radius, open) {
+function draw_pacman(ctx, x, y, radius, open) {
   x = x || 200
   y = y || 200
   radius = radius || 150
