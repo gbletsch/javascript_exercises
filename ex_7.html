@@ -4,6 +4,7 @@
     <title>A Solid Game Loop</title>
     <link rel='stylesheet' href='styles.css'>
     <script src='drawing.js'></script>
+    <script src='objects.js'></script>
   </head>
   <body>
     <h1>A Solid Game Loop</h1>
@@ -12,27 +13,7 @@
       var canvas = document.getElementById('asteroids');
       var context = canvas.getContext('2d');
 
-      var asteroid = {
-        // asteroid shape
-        segments: 24,
-        shape: [],
-        radius: 50,
-        noise: .5,
-
-        // asteroid state
-        x: canvas.width * Math.random(),
-        y: canvas.height * Math.random(),
-        angle: 0,
-
-        // asteroid movement
-        x_speed: canvas.width * (Math.random() - .5),
-        y_speed: canvas.height * (Math.random() - .5),
-        rotation_speed: 2 * Math.PI * (Math.random() - .5),
-      };
-
-      for(var i = 0; i < asteroid.segments; i++){
-        asteroid.shape.push(Math.random() - .5);
-      }
+      var asteroid = new Asteroid(24, 50, .2);
 
       function draw(ctx, guide){
         if(guide){
