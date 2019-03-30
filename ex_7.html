@@ -12,52 +12,55 @@
       var canvas = document.getElementById('asteroids');
       var context = canvas.getContext('2d');
 
-      // asteroid shape
-      var segments = 24;
-      var shape = [];
-      for(var i = 0; i < segments; i++){
-        shape.push(Math.random() - .5);
+      var asteroid = {
+        // asteroid shape
+        segments: 24,
+        shape: [],
+        radius: 50,
+        noise: .5,
+
+        // asteroid state
+        x: canvas.width * Math.random(),
+        y: canvas.height * Math.random(),
+        angle: 0,
+
+        // asteroid movement
+        x_speed: canvas.width * (Math.random() - .5),
+        y_speed: canvas.height * (Math.random() - .5),
+        rotation_speed: 2 * Math.PI * (Math.random() - .5),
+      };
+
+      for(var i = 0; i < asteroid.segments; i++){
+        asteroid.shape.push(Math.random() - .5);
       }
-      var radius = 50;
-      var noise = .2;
-
-      // asteroid state
-      var x = canvas.width * Math.random();
-      var y = canvas.height * Math.random();
-      var angle = 0;
-
-      // asteroid movement
-      var x_speed = canvas.width * (Math.random() - .5);
-      var y_speed = canvas.height * (Math.random() - .5);
-      var rotation_speed = 2 * Math.PI * (Math.random() - .5);
 
       function draw(ctx, guide){
         if(guide){
           draw_grid(ctx);
         }
         ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(angle);
+        ctx.translate(asteroid.x, asteroid.y);
+        ctx.rotate(asteroid.angle);
         draw_asteroid(
-          ctx, radius, shape, {
+          ctx, asteroid.radius, asteroid.shape, {
             guide: guide,
-            noise: noise
+            noise: asteroid.noise
         });
         ctx.restore();
       }
 
       function update(elapsed){
-        if(x - radius + elapsed * x_speed > canvas.width)
-        {x = - radius;}
-        if(x + radius + elapsed * x_speed < 0)
-        {x = canvas.width + radius;}
-        if(y - radius + elapsed * y_speed > canvas.height)
-        {y = - radius;}
-        if(y + radius + elapsed * y_speed < 0)
-        {x = canvas.height + radius}
-        x += elapsed * x_speed;
-        y += elapsed * y_speed;
-        angle = (angle + elapsed * rotation_speed) % (2 * Math.PI);
+        if(asteroid.x - asteroid.radius + elapsed * asteroid.x_speed > canvas.width)
+        {asteroid.x = - asteroid.radius;}
+        if(asteroid.x + asteroid.radius + elapsed * asteroid.x_speed < 0)
+        {asteroid.x = canvas.width + asteroid.radius;}
+        if(asteroid.y - asteroid.radius + elapsed * asteroid.y_speed > canvas.height)
+        {asteroid.y = - asteroid.radius;}
+        if(asteroid.y + asteroid.radius + elapsed * asteroid.y_speed < 0)
+        {asteroid.y = canvas.height + asteroid.radius}
+        asteroid.x += elapsed * asteroid.x_speed;
+        asteroid.y += elapsed * asteroid.y_speed;
+        asteroid.angle = (asteroid.angle + elapsed * asteroid.rotation_speed) % (2 * Math.PI);
       }
 
       var previous, elapsed;
