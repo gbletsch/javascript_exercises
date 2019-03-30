@@ -13,35 +13,25 @@
       var canvas = document.getElementById('asteroids');
       var context = canvas.getContext('2d');
 
-      var asteroid = new Asteroid(24, 50, .2);
+      var asteroids = [
+        new Asteroid(24, 50, .2),
+        new Asteroid(24, 50, .5),
+        new Asteroid( 5, 50, .5)
+      ];
 
-      function draw(ctx, guide){
+      function draw(context, guide){
         if(guide){
-          draw_grid(ctx);
+          draw_grid(context);
         }
-        ctx.save();
-        ctx.translate(asteroid.x, asteroid.y);
-        ctx.rotate(asteroid.angle);
-        draw_asteroid(
-          ctx, asteroid.radius, asteroid.shape, {
-            guide: guide,
-            noise: asteroid.noise
+        asteroids.forEach(function(asteroid){
+          asteroid.draw(context, guide);
         });
-        ctx.restore();
       }
 
-      function update(elapsed){
-        if(asteroid.x - asteroid.radius + elapsed * asteroid.x_speed > canvas.width)
-        {asteroid.x = - asteroid.radius;}
-        if(asteroid.x + asteroid.radius + elapsed * asteroid.x_speed < 0)
-        {asteroid.x = canvas.width + asteroid.radius;}
-        if(asteroid.y - asteroid.radius + elapsed * asteroid.y_speed > canvas.height)
-        {asteroid.y = - asteroid.radius;}
-        if(asteroid.y + asteroid.radius + elapsed * asteroid.y_speed < 0)
-        {asteroid.y = canvas.height + asteroid.radius}
-        asteroid.x += elapsed * asteroid.x_speed;
-        asteroid.y += elapsed * asteroid.y_speed;
-        asteroid.angle = (asteroid.angle + elapsed * asteroid.rotation_speed) % (2 * Math.PI);
+      function update(elapsed) {
+        asteroids.forEach(function(asteroid){
+          asteroid.update(elapsed);
+        });
       }
 
       var previous, elapsed;
