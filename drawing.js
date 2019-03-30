@@ -27,24 +27,20 @@ function draw_grid(ctx, minor, major, stroke, fill) {
   ctx.restore();
 }
 
-function draw_pacman(ctx, x, y, radius, open) {
-  x = x || 200
-  y = y || 200
-  radius = radius || 150
-  open = open || Math.random()
-
-  // ctx.save();
+function draw_pacman(ctx, radius, mouth) {
+  angle = 0.2 * Math.PI * mouth;
+  ctx.save();
+  ctx.fillStyle = "yellow";
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 0.5;
   ctx.beginPath();
-  // context.arc(x, y, radius, start_angle, end_angle)
-  start_angle = Math.PI * .2 * open;
-  end_angle = -Math.PI * .2 * (open);
-  ctx.arc(x, y, radius, start_angle, end_angle);
-  // context.lineTo(x, y)
-  ctx.lineTo(x, y);
-  ctx.fillStyle = 'yellow';
+  ctx.arc(0, 0, radius, angle, -angle);
+  ctx.lineTo(0, 0);
+  ctx.closePath()
   ctx.fill();
-  // ctx.restore();
-  }
+  ctx.stroke();
+  ctx.restore();
+}
 
 function draw_ship(ctx, radius, options) {
   options = options || {};
