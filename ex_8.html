@@ -13,14 +13,33 @@
       canvas = document.getElementById('pacman');
       context = canvas.getContext('2d');
 
-      pacman = new PacMan(150, 150, 20, 120);
+      var sprites_radius = 20
+      pacman = new PacMan(150, 150, sprites_radius, 120);
+
+      var ghosts = []
+      var colours = ['red', 'pink', 'cyan', 'orange']
+      for(i = 0; i < 4; i++){
+        ghosts.push(
+          new Ghost(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height,
+            sprites_radius,
+            Math.random() * 100, colours[i]
+        ))
+      }
 
       function draw(ctx, guide){
-        pacman.draw(ctx);
+        pacman.draw(ctx, guide);
+        ghosts.forEach(function(ghost){
+          ghost.draw(ctx, guide);
+        });
       }
 
       function update(elapsed){
         pacman.update(elapsed, 300, 300);
+        ghosts.forEach(function(ghost){
+          ghost.update(pacman, elapsed);
+        })
       }
 
       var previous, elapsed;
