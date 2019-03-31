@@ -48,6 +48,18 @@
         asteroids.forEach(function(asteroid){
           asteroid.update(elapsed, context)
         });
+
+        // if its nearly stopped, turn
+        if(Math.abs(ship.speed()) < 15) {
+        ship.angle += Math.PI * 2 * 0.01;
+        }
+        // If Its going fast, turn around to slow down
+        if(Math.abs(ship.speed()) > 100) {
+          ship.angle = ship.movement_angle() + Math.PI;
+          ship.update(elapsed, context);
+        }
+        // push in the direction its pointing (thrusters?)
+        ship.push(ship.angle, 1000, elapsed)
         ship.update(elapsed, context);
       }
 

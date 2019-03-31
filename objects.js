@@ -156,13 +156,11 @@ PacMan.prototype.turn_right = function(){
 
 PacMan.prototype.update = function(elapsed, width, height){
   // an average of once per 100 frames
-  if(Math.random() <= .01){
-    if(Math.random < .5){
-      this.turn_left();
-    } else {
-      this.turn_right();
-    }
-  }
+  // if(Math.random() <= .01){
+  //   if(Math.random < .5){
+  //     this.turn_left();
+  //   } else {
+  //     this.turn_right();
   if(this.x - this.radius + elapsed * this.x_speed > width) {
     this.x = -this.radius;
   }
@@ -180,6 +178,29 @@ PacMan.prototype.update = function(elapsed, width, height){
   this.time += elapsed;
   this.mouth = Math.abs(Math.sin(2 * Math.PI * this.time));
 }
+
+PacMan.prototype.move_right = function() {
+  this.x_speed = this.speed;
+  this.y_speed = 0;
+  this.angle = 0;
+}
+PacMan.prototype.move_down = function() {
+  this.x_speed = 0;
+  this.y_speed = this.speed;
+  this.angle = 0.5 * Math.PI;
+}
+PacMan.prototype.move_left = function() {
+  this.x_speed = -this.speed;
+  this.y_speed = 0;
+  this.angle = Math.PI;
+}
+PacMan.prototype.move_up = function() {
+  this.x_speed = 0;
+  this.y_speed = -this.speed;
+  this.angle = 1.5 * Math.PI;
+}
+
+
 
 function Ghost(x, y, radius, speed, colour) {
   this.x = x;
