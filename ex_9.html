@@ -14,15 +14,41 @@
       var canvas = document.getElementById('asteroids');
       var context = canvas.getContext('2d');
 
-      var mass = new Mass(200, 200);
+      var asteroids = [];
+      for(let i = 0; i < 4; i++){
+        // (x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
+        let asteroid = new Asteroid(
+          2000 + Math.random() * 8000,
+          Math.random() * canvas.width,
+          Math.random() * canvas.height,
+        );
+        // force, elapsed
+        asteroid.twist((Math.random() - .5) * 500, 60);
+        // angle, force, elapsed
+        asteroid.push(
+          Math.random() * 2 * Math.PI, 2000, 60
+        );
+        asteroids.push(asteroid);
+      }
+
+      // (x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
+      var ship = new Ship(
+        canvas.width / 2, canvas.height / 2
+      );
 
       function draw(ctx) {
         draw_grid(ctx);
-        mass.draw(ctx)
+        asteroids.forEach(function(asteroid){
+          asteroid.draw(ctx);
+        });
+        ship.draw(ctx);
       }
 
       function update(elapsed) {
-        mass.update(elapsed, context);
+        asteroids.forEach(function(asteroid){
+          asteroid.update(elapsed, context)
+        });
+        ship.update(elapsed, context);
       }
 
       var previous;
