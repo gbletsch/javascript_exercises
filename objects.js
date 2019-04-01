@@ -93,14 +93,15 @@ Asteroid.prototype.draw = function(ctx, guide) {
     ctx.restore();
   }
 
-function Ship(x, y, power) {
-  // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
-  this.super(x, y, 10, 20, 1.5 * Math.PI);
+function Ship(x, y, mass, radius, power, weapon_power) {
+// Mass(x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
+  this.super(x, y, mass, radius, 1.5 * Math.PI);
   this.thruster_power = power;
-  this.steering_power = power / 20;
+  this.steering_power = this.thruster_power / 20;
   this.right_thruster = false;
   this.left_thruster = false;
   this.thruster_on = false;
+  this.weapon_power = weapon_power || 200;
 }
 extend(Ship, Mass);
 
@@ -125,6 +126,44 @@ Ship.prototype.draw = function(c, guide) {
   });
   c.restore();
 }
+
+Ship.prototype.projectile = function(elapsed) {
+  // Projectile(mass, lifetime, x, y, x_speed, y_speed, rotation_speed)
+  var p = new Projectile(0.025, 1,
+    this.x + Math.cos(this.angle) * this.radius,
+    this.y + Math.sin(this.angle) * this.radius,
+    this.x_speed,
+    this.y_speed,
+    this.rotation_speed
+  );
+  p.push(this.angle, this.weapon_power, elapsed);
+  this.push(this.angle + Math.PI, this.weapon_power, elapsed);
+  return p;
+}
+
+function Projectile(mass, lifetime, x, y, x_speed, y_speed, rotation_speed) {
+  var density = 0.001; // low density means we can see very light projectiles
+  var radius = Math.sqrt((mass / density) / Math.PI);
+  // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
+  this.super(x, y, mass, radius, 0, x_speed, y_speed, rotation_speed);
+  this.lifetime = lifetime;
+  this.life = 1.0;
+}
+extend(Projectile, Mass);
+
+Projectile.prototype.update = function(elapsed, c) {
+  this.life -= (elapsed / this.lifetime);
+  Mass.prototype.update.apply(this, arguments);
+}
+
+Projectile.prototype.draw = function(c, guide) {
+  c.save();
+  c.translate(this.x, this.y);
+  c.rotate(this.angle);
+  draw_projectile(c, this.radius, this.life, guide);
+  c.restore();
+}
+
 
 
 function PacMan(x, y, radius, speed){

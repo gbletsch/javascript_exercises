@@ -92,56 +92,52 @@ function draw_ship(ctx, radius, options) {
       Math.cos(-angle) * radius,
       Math.sin(-angle) * radius
     );
- ctx.lineTo(0, 0);
- ctx.lineTo(
-   Math.cos(angle) * radius,
-   Math.sin(angle) * radius
- );
- ctx.moveTo(-radius, 0);
- ctx.lineTo(0, 0);
- ctx.stroke();
- ctx.beginPath();
- ctx.arc(
-   Math.cos(angle) * radius * curve2,
-   Math.sin(angle) * radius * curve2,
-   radius/40, 0, 2 * Math.PI
- );
- ctx.fill();
- ctx.beginPath();
- ctx.arc(
-   Math.cos(-angle) * radius * curve2,
-   Math.sin(-angle) * radius * curve2,
-   radius/40, 0, 2 * Math.PI
- );
- ctx.fill();
- ctx.beginPath();
- ctx.arc(radius * curve1 - radius, 0, radius/50, 0, 2 *
-Math.PI);
- ctx.fill();
-}
+   ctx.lineTo(0, 0);
+   ctx.lineTo(
+     Math.cos(angle) * radius,
+     Math.sin(angle) * radius
+   );
+   ctx.moveTo(-radius, 0);
+   ctx.lineTo(0, 0);
+   ctx.stroke();
+   ctx.beginPath();
+   ctx.arc(
+     Math.cos(angle) * radius * curve2,
+     Math.sin(angle) * radius * curve2,
+     radius/40, 0, 2 * Math.PI
+   );
+   ctx.fill();
+   ctx.beginPath();
+   ctx.arc(
+     Math.cos(-angle) * radius * curve2,
+     Math.sin(-angle) * radius * curve2,
+     radius/40, 0, 2 * Math.PI
+   );
+   ctx.fill();
+   ctx.beginPath();
+   ctx.arc(radius * curve1 - radius, 0, radius/50, 0, 2 * Math.PI);
+   ctx.fill();
+  }
 
 // making some fire to the thrusters
-if(options.thruster) {
-ctx.save();
-ctx.strokeStyle = "yellow";
-ctx.fillStyle = "red";
-ctx.lineWidth = 3;
-ctx.beginPath();
-ctx.moveTo(
-  Math.cos(Math.PI + angle * 0.8) * radius / 2,
-  Math.sin(Math.PI + angle * 0.8) * radius / 2
-)
-ctx.quadraticCurveTo(-radius * 2, 0,
-  Math.cos(Math.PI - angle * 0.8) * radius / 2,
-  Math.sin(Math.PI - angle * 0.8) * radius / 2
-);
-ctx.fill();
-ctx.stroke();
-ctx.restore();
-}
-
-
-
+  if(options.thruster) {
+    ctx.save();
+    ctx.strokeStyle = "yellow";
+    ctx.fillStyle = "red";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(
+      Math.cos(Math.PI + angle * 0.8) * radius / 2,
+      Math.sin(Math.PI + angle * 0.8) * radius / 2
+    )
+    ctx.quadraticCurveTo(-radius * 2, 0,
+      Math.cos(Math.PI - angle * 0.8) * radius / 2,
+      Math.sin(Math.PI - angle * 0.8) * radius / 2
+    );
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
 ctx.restore();
 }
 
@@ -173,6 +169,19 @@ function draw_asteroid(ctx, radius, shape, options) {
   }
   ctx.restore();
 }
+
+function draw_projectile(ctx, radius, lifetime) {
+  ctx.save();
+  ctx.fillStyle = "rgb(100%, 100%, " + (100 * lifetime) + "%)";
+  ctx.beginPath();
+  // arc(x,y,r,sAngle,eAngle,counterclockwise)
+  ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.restore();
+}
+
+
+
 
 function draw_ghost(ctx, radius, options) {
   options = options || {}

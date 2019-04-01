@@ -31,10 +31,14 @@
         asteroids.push(asteroid);
       }
 
-      // (x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
+      // Ship(x, y, mass, radius, power, weapon_power)
       var ship = new Ship(
-        canvas.width / 2, canvas.height / 2, 1000
+        canvas.width / 2, canvas.height / 2,
+        10, 15,
+        1000, 200
       );
+
+      var projectiles = [];
 
       function draw(ctx) {
         if(guide){
@@ -44,6 +48,9 @@
           asteroid.draw(ctx, guide);
         });
         ship.draw(ctx, guide);
+        projectiles.forEach(function(p) {
+          p.draw(context);
+        });
       }
 
       function update(elapsed) {
@@ -51,6 +58,15 @@
           asteroid.update(elapsed, context)
         });
         ship.update(elapsed, context);
+        projectiles.forEach(function(projectile, i, projectiles) {
+          projectile.update(elapsed, context);
+          if(projectile.life <= 0) {
+            projectiles.splice(i, 1);
+          }
+        });
+        if(ship.trigger) {
+          projectiles.push(ship.projectile(elapsed));
+        }
       }
 
       var previous;
@@ -79,6 +95,10 @@
           case "ArrowRight":
           case 39: // right arrow
             ship.right_thruster = value;
+            break;
+          case " ":
+          case 32: //spacebar
+            ship.trigger = value;
             break;
           case "g":
           case 71: //g
