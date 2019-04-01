@@ -97,17 +97,23 @@ function Ship(x, y, power) {
   // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
   this.super(x, y, 10, 20, 1.5 * Math.PI);
   this.thruster_power = power;
+  this.steering_power = power / 20;
+  this.right_thruster = false;
+  this.left_thruster = false;
   this.thruster_on = false;
 }
+extend(Ship, Mass);
 
-Ship.prototype.update = function(elapsed) {
+Ship.prototype.update = function(elapsed, c) {
   this.push(
     this.angle, this.thruster_on * this.thruster_power, elapsed
   );
+  this.twist(
+    (this.right_thruster - this.left_thruster) * this.steering_power,
+    elapsed
+  );
   Mass.prototype.update.apply(this, arguments);
 }
-
-extend(Ship, Mass);
 
 Ship.prototype.draw = function(c, guide) {
   c.save();

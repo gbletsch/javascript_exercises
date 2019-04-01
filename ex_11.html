@@ -13,7 +13,7 @@
       'use strict';
       var canvas = document.getElementById('asteroids');
       var context = canvas.getContext('2d');
-
+      var guide = true;
       var asteroids = [];
       for(let i = 0; i < 4; i++){
         // (x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
@@ -37,29 +37,19 @@
       );
 
       function draw(ctx) {
-        draw_grid(ctx);
+        if(guide){
+          draw_grid(ctx);
+        }
         asteroids.forEach(function(asteroid){
-          asteroid.draw(ctx);
+          asteroid.draw(ctx, guide);
         });
-        ship.draw(ctx);
+        ship.draw(ctx, guide);
       }
 
       function update(elapsed) {
         asteroids.forEach(function(asteroid){
           asteroid.update(elapsed, context)
         });
-
-        // if its nearly stopped, turn
-        if(Math.abs(ship.speed()) < 15) {
-        ship.angle += Math.PI * 2 * 0.01;
-        }
-        // If Its going fast, turn around to slow down
-        if(Math.abs(ship.speed()) > 100) {
-          ship.angle = ship.movement_angle() + Math.PI;
-          ship.update(elapsed, context);
-        }
-        // push in the direction its pointing (thrusters?)
-        ship.push(ship.angle, 1000, elapsed)
         ship.update(elapsed, context);
       }
 
@@ -82,6 +72,17 @@
           case 38: // up arrow
             ship.thruster_on = value;
             break;
+          case "ArrowLeft":
+          case 37: // left arrow
+            ship.left_thruster = value;
+            break;
+          case "ArrowRight":
+          case 39: // right arrow
+            ship.right_thruster = value;
+            break;
+          case "g":
+          case 71: //g
+            if(value) guide = !guide;
           default:
             nothing_handled = true;
         }
