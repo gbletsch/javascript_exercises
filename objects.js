@@ -93,26 +93,32 @@ Asteroid.prototype.draw = function(ctx, guide) {
     ctx.restore();
   }
 
-function Ship(x, y) {
-    // (x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
-    this.super(x, y, 10, 20, 1.5 * Math.PI);
-  }
+function Ship(x, y, power) {
+  // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
+  this.super(x, y, 10, 20, 1.5 * Math.PI);
+  this.thruster_power = power;
+  this.thruster_on = false;
+}
+
+Ship.prototype.update = function(elapsed) {
+  this.push(
+    this.angle, this.thruster_on * this.thruster_power, elapsed
+  );
+  Mass.prototype.update.apply(this, arguments);
+}
 
 extend(Ship, Mass);
 
-Ship.prototype.draw = function(ctx, guide) {
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.angle);
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 2;
-    ctx.fillStyle = "black";
-    draw_ship(ctx, this.radius, {
-      guide: guide
-    });
-    ctx.restore();
-  }
-
+Ship.prototype.draw = function(c, guide) {
+  c.save();
+  c.translate(this.x, this.y);
+  c.rotate(this.angle);
+  draw_ship(c, this.radius, {
+    guide: guide,
+    thruster: this.thruster_on
+  });
+  c.restore();
+}
 
 
 function PacMan(x, y, radius, speed){

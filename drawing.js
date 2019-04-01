@@ -79,6 +79,7 @@ function draw_ship(ctx, radius, options) {
     Math.sin(-angle) * radius * curve2,
     radius, 0
   );
+
   ctx.fill();
   ctx.stroke();
   // the guide drawing code is getting complicated
@@ -118,6 +119,29 @@ function draw_ship(ctx, radius, options) {
 Math.PI);
  ctx.fill();
 }
+
+// making some fire to the thrusters
+if(options.thruster) {
+ctx.save();
+ctx.strokeStyle = "yellow";
+ctx.fillStyle = "red";
+ctx.lineWidth = 3;
+ctx.beginPath();
+ctx.moveTo(
+  Math.cos(Math.PI + angle * 0.8) * radius / 2,
+  Math.sin(Math.PI + angle * 0.8) * radius / 2
+)
+ctx.quadraticCurveTo(-radius * 2, 0,
+  Math.cos(Math.PI - angle * 0.8) * radius / 2,
+  Math.sin(Math.PI - angle * 0.8) * radius / 2
+);
+ctx.fill();
+ctx.stroke();
+ctx.restore();
+}
+
+
+
 ctx.restore();
 }
 
