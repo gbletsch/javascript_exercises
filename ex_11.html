@@ -1,14 +1,14 @@
 <!doctype html>
 <html>
   <head>
-    <title>Inheritance</title>
+    <title>Events</title>
     <link rel='stylesheet' href='styles.css'>
     <script src='drawing.js'></script>
     <script src='objects.js'></script>
   </head>
   <body>
-    <h1>Inheritance</h1>
-    <canvas id='asteroids' width='600' height='600'></canvas>
+    <h1>Events</h1>
+    <canvas id='asteroids' width='600' height='600' tabindex="1"></canvas>
     <script>
       'use strict';
       var canvas = document.getElementById('asteroids');
@@ -74,6 +74,27 @@
         window.requestAnimationFrame(frame);
       }
       window.requestAnimationFrame(frame);
+
+      function key_handler(e, value) {
+        var nothing_handled = false;
+        switch(e.key || e.keyCode) {
+          case "ArrowUp":
+          case 38: // up arrow
+            ship.thruster_on = value;
+            break;
+          default:
+            nothing_handled = true;
+        }
+        if(!nothing_handled) e.preventDefault();
+      }
+
+      context.canvas.addEventListener("keydown", function(e) {
+        key_handler(e, true);
+      }, true);
+      context.canvas.addEventListener("keyup", function(e) {
+        key_handler(e, false);
+      }, true);
+      canvas.focus();
     </script>
   </body>
 </html>
