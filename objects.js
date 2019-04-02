@@ -102,6 +102,9 @@ function Ship(x, y, mass, radius, power, weapon_power) {
   this.left_thruster = false;
   this.thruster_on = false;
   this.weapon_power = weapon_power || 200;
+  this.loaded = false;
+  this.weapon_reload_time = 0.25; // seconds
+  this.time_until_reloaded = this.weapon_reload_time;
 }
 extend(Ship, Mass);
 
@@ -113,6 +116,11 @@ Ship.prototype.update = function(elapsed, c) {
     (this.right_thruster - this.left_thruster) * this.steering_power,
     elapsed
   );
+  // reload as necessary
+  this.loaded = this.time_until_reloaded === 0;
+  if(!this.loaded) {
+    this.time_until_reloaded -= Math.min(elapsed, this.time_until_reloaded);
+  }
   Mass.prototype.update.apply(this, arguments);
 }
 
@@ -138,6 +146,7 @@ Ship.prototype.projectile = function(elapsed) {
   );
   p.push(this.angle, this.weapon_power, elapsed);
   this.push(this.angle + Math.PI, this.weapon_power, elapsed);
+  this.time_until_reloaded = this.weapon_reload_time;
   return p;
 }
 
