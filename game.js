@@ -25,6 +25,11 @@ function AsteroidsGame(id){
     'keyup', this.keyUp.bind(this), true
   );
 
+  // health indicator
+  this.health_indicator = new Indicator(
+    'health', 5, 5, 100, 10
+  );
+
   //first call to animation
   window.requestAnimationFrame(this.frame.bind(this));
 }
@@ -57,6 +62,17 @@ AsteroidsGame.prototype.draw = function(){
   this.projectiles.forEach(function(p) {
     p.draw(this.context);
   }, this);
+  this.health_indicator.draw(
+    this.context, this.ship.health, this.ship.max_health
+  );
+  // this.context.save();
+  // this.context.font = '18px arial';
+  // this.context.fillStyle = 'white';
+  // this.context.fillText(
+  //   'health: '+ this.ship.health.toFixed(1),
+  //   10, this.canvas.height - 10
+  // );
+  // this.context.restore();
 }
 
 // update before each frame

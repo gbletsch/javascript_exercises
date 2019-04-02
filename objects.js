@@ -129,6 +129,10 @@ Ship.prototype.update = function(elapsed, c) {
   if(!this.loaded) {
     this.time_until_reloaded -= Math.min(elapsed, this.time_until_reloaded);
   }
+  // take damage
+  if(this.compromised){
+    this.health -= Math.min(elapsed, this.health);
+  }
   Mass.prototype.update.apply(this, arguments);
 }
 
@@ -188,6 +192,32 @@ Projectile.prototype.draw = function(c, guide) {
   draw_projectile(c, this.radius, this.life, guide);
   c.restore();
 }
+
+function Indicator(label, x, y, width, height){
+  this.label = label + ': ';
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+}
+
+Indicator.prototype.draw = function(c, max, level) {
+  c.save();
+  c.strokeStyle = "white";
+  c.fillStyle = "white";
+  c.font = this.height + "pt Arial";
+  var offset = c.measureText(this.label).width;
+  c.fillText(this.label, this.x, this.y + this.height - 1);
+  c.beginPath();
+  c.rect(offset + this.x, this.y, this.width, this.height);
+  c.stroke();
+  c.beginPath();
+  c.rect(offset + this.x, this.y, this.width * (max / level), this.height);
+  c.fill();
+  c.restore()
+}
+
+
 
 
 
