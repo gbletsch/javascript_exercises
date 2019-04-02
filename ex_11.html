@@ -83,10 +83,15 @@
 
       function key_handler(e, value) {
         var nothing_handled = false;
+        // alert('e.key: ' + e.key + ' - e.keyCode: ' + e.keyCode)
         switch(e.key || e.keyCode) {
           case "ArrowUp":
           case 38: // up arrow
             ship.thruster_on = value;
+            break;
+          case 'ArrowDown':
+          case 40:
+            ship.retro_on = value;
             break;
           case "ArrowLeft":
           case 37: // left arrow
