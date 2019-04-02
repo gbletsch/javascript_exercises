@@ -93,6 +93,8 @@ Asteroid.prototype.draw = function(ctx, guide) {
     ctx.restore();
   }
 
+
+
 function Ship(x, y, mass, radius, power, weapon_power) {
 // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotation_speed)
   this.super(x, y, mass, radius, 1.5 * Math.PI);
