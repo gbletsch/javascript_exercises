@@ -108,6 +108,9 @@ function Ship(x, y, mass, radius, power, weapon_power) {
   this.loaded = false;
   this.weapon_reload_time = 0.25; // seconds
   this.time_until_reloaded = this.weapon_reload_time;
+  this.compromised = false;
+  this.max_health = 2.0;
+  this.health = this.max_health;
 }
 extend(Ship, Mass);
 
@@ -133,6 +136,14 @@ Ship.prototype.draw = function(c, guide) {
   c.save();
   c.translate(this.x, this.y);
   c.rotate(this.angle);
+  if(guide && this.compromised){
+    c.save();
+    c.fillStyle = 'red';
+    c.beginPath();
+    c.arc(0, 0, this.radius, 0, 2 * Math.PI);
+    c.fill();
+    c.restore();
+  }
   draw_ship(c, this.radius, {
     guide: guide,
     thruster: this.thruster_on

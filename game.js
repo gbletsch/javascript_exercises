@@ -59,9 +59,14 @@ AsteroidsGame.prototype.draw = function(){
   }, this);
 }
 
+// update before each frame
 AsteroidsGame.prototype.update = function(elapsed) {
+  this.ship.compromised = false;
   this.asteroids.forEach(function(asteroid){
-    asteroid.update(elapsed, this.context)
+    asteroid.update(elapsed, this.context);
+    if(collision(asteroid, this.ship)){
+      this.ship.compromised = true;
+    }
   }, this);
   this.ship.update(elapsed, this.context);
   this.projectiles.forEach(function(projectile, i, projectiles) {
@@ -123,4 +128,12 @@ AsteroidsGame.prototype.key_handler = function(e, value) {
       nothing_handled = true;
   }
   if(!nothing_handled) e.preventDefault();
+}
+
+// verify collision
+function collision(obj1, obj2){
+  return distance_between(obj1, obj2) < (obj1.radius + obj2.radius);
+}
+function distance_between(obj1, obj2){
+  return Math.sqrt(Math.pow(obj1.x - obj2.x, 2) + Math.pow(obj1.y - obj2.y, 2));
 }
