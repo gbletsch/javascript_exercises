@@ -4,6 +4,7 @@ function AsteroidsGame(id){
   this.canvas.focus();
   this.guide = true;
   this.asteroids = [];
+  this.asteroid_push = 2500;
   for(let i = 0; i < 4; i++){
     this.asteroids.push(this.moving_asteroids());
   }
@@ -30,23 +31,41 @@ function AsteroidsGame(id){
     'health', 5, 5, 100, 10
   );
 
+  this.mass_destroyed = 500;
+  this.score = 0;
+
   //first call to animation
   window.requestAnimationFrame(this.frame.bind(this));
 }
 
 AsteroidsGame.prototype.moving_asteroids = function(){
   // Asteroid(mass, x, y, x_speed, y_speed, rotation_speed)
-  let asteroid = new Asteroid(
+  var asteroid = this.new_asteroid();
+  this.push_asteroid(asteroid, 60);
+  return asteroid;
+}
+
+AsteroidsGame.prototype.new_asteroid = function() {
+  return new Asteroid(
     2000 + Math.random() * 8000,
     Math.random() * this.canvas.width,
     Math.random() * this.canvas.height,
   );
-  // force, elapsed
-  asteroid.twist((Math.random() - .5) * 500, 60);
-  // angle, force, elapsed
-  asteroid.push(Math.random() * 2 * Math.PI, 2000, 60);
-  return asteroid
 }
+
+AsteroidsGame.prototype.push_asteroid = function(asteroid, elapsed) {
+  elapsed = elapsed || 0.015;
+  asteroid.push(
+    2 * Math.PI * Math.random(),
+    this.asteroid_push,
+    elapsed
+  );
+  asteroid.twist(
+    (Math.random() - 0.5) * Math.PI * this.asteroid_push * 0.02,
+    elapsed
+  );
+}
+
 
 AsteroidsGame.prototype.draw = function(){
   if(this.guide){
@@ -65,30 +84,35 @@ AsteroidsGame.prototype.draw = function(){
   this.health_indicator.draw(
     this.context, this.ship.health, this.ship.max_health
   );
-  // this.context.save();
-  // this.context.font = '18px arial';
-  // this.context.fillStyle = 'white';
-  // this.context.fillText(
-  //   'health: '+ this.ship.health.toFixed(1),
-  //   10, this.canvas.height - 10
-  // );
-  // this.context.restore();
 }
 
 // update before each frame
 AsteroidsGame.prototype.update = function(elapsed) {
   this.ship.compromised = false;
+
+  // update asteroids
   this.asteroids.forEach(function(asteroid){
     asteroid.update(elapsed, this.context);
     if(collision(asteroid, this.ship)){
       this.ship.compromised = true;
     }
   }, this);
+  // update ship
   this.ship.update(elapsed, this.context);
-  this.projectiles.forEach(function(projectile, i, projectiles) {
-    projectile.update(elapsed, this.context);
-    if(projectile.life <= 0) {
+
+  // update projectiles
+  this.projectiles.forEach(function(p, i, projectiles) {
+    p.update(elapsed, this.context);
+    if(p.life <= 0) {
       projectiles.splice(i, 1);
+    } else {
+      this.asteroids.forEach(function(asteroid, j) {
+        if(collision(asteroid, p)) {
+          projectiles.splice(i, 1);
+          this.asteroids.splice(j, 1);
+          this.split_asteroid(asteroid, elapsed);
+        }
+      }, this);
     }
   }, this);
   if(this.ship.trigger && this.ship.loaded) {
@@ -145,6 +169,24 @@ AsteroidsGame.prototype.key_handler = function(e, value) {
   }
   if(!nothing_handled) e.preventDefault();
 }
+
+// split asteroids
+AsteroidsGame.prototype.split_asteroid = function(asteroid, elapsed) {
+  asteroid.mass -= this.mass_destroyed;
+  this.score += this.mass_destroyed;
+  var split = 0.25 + 0.5 * Math.random(); // split unevenly
+  var ch1 = asteroid.child(asteroid.mass * split);
+  var ch2 = asteroid.child(asteroid.mass * (1 - split));
+  [ch1, ch2].forEach(function(child) {
+    if(child.mass < this.mass_destroyed) {
+      this.score += child.mass;
+    } else {
+      this.push_asteroid(child, elapsed);
+      this.asteroids.push(child);
+    }
+  }, this);
+}
+
 
 // verify collision
 function collision(obj1, obj2){
