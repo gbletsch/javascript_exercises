@@ -34,6 +34,16 @@ function AsteroidsGame(id){
   this.mass_destroyed = 500;
   this.score = 0;
 
+  this.score_indicator = new NumberIndicator("score",
+    this.canvas.width - 10, 5
+  );
+  this.fps_indicator = new NumberIndicator("fps",
+    this.canvas.width - 10,
+    this.canvas.height - 15,
+    {digits: 2}
+  );
+
+
   //first call to animation
   window.requestAnimationFrame(this.frame.bind(this));
 }
@@ -73,6 +83,7 @@ AsteroidsGame.prototype.draw = function(){
     this.asteroids.forEach(function(asteroid){
       draw_line(this.context, asteroid, this.ship);
     }, this);
+    this.fps_indicator.draw(this.context, this.fps);
   }
   this.asteroids.forEach(function(asteroid){
     asteroid.draw(this.context, this.guide);
@@ -84,6 +95,7 @@ AsteroidsGame.prototype.draw = function(){
   this.health_indicator.draw(
     this.context, this.ship.health, this.ship.max_health
   );
+  this.score_indicator.draw(this.context, this.score);
 }
 
 // update before each frame
@@ -124,6 +136,7 @@ AsteroidsGame.prototype.frame = function(timestamp){
   if (!this.previous) this.previous = timestamp;
   var elapsed = timestamp - this.previous;
   this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  this.fps = 1000 / elapsed;
   this.update(elapsed / 1000);
   this.draw();
   this.previous = timestamp;
